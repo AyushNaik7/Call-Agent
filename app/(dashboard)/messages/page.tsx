@@ -1,17 +1,53 @@
 "use client";
 
+import { useState, useEffect } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Phone, CheckCircle, Clock, AlertCircle } from "lucide-react";
-import { mockMessages } from "@/lib/mock-data";
+import { Phone, CheckCircle, Clock, AlertCircle, Loader2 } from "lucide-react";
+import { getMessages, updateMessageStatus } from "@/lib/actions/messages";
 import { formatPhoneNumber } from "@/lib/utils";
 import { format } from "date-fns";
 
 export default function MessagesPage() {
-  const unreadMessages = mockMessages.filter((m) => m.status === "unread");
-  const readMessages = mockMessages.filter((m) => m.status === "read");
-  const resolvedMessages = mockMessages.filter((m) => m.status === "resolved");
+  const [allMessages, setAllMessages] = useState<any[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [updatingId, setUpdatingId] = useState<string | null>(null);
+
+  const loadMessages = async () => {
+    setLoading(true);
+    const data = await getMessages();
+    setAllMessages(data);
+    setLoading(false);
+  };
+
+  useEffect(() => {
+    loadMessages();
+  }, []);
+
+  const handleStatusUpdate = async (id: string, status: "read" | "resolved") => {
+    setUpdatingId(id);
+    try {
+      await updateMessageStatus(id, status);
+      await loadMessages();
+    } catch (error) {
+      alert("Failed to update message status");
+    } finally {
+      setUpdatingId(null);
+    }
+  };
+
+  const unreadMessages = allMessages.filter((m: any) => m.status === "unread");
+  const readMessages = allMessages.filter((m: any) => m.status === "read");
+  const resolvedMessages = allMessages.filter((m: any) => m.status === "resolved");
+
+  if (loading) {
+    return (
+      <div className="flex h-96 items-center justify-center">
+        <Loader2 className="h-8 w-8 animate-spin text-gray-400" />
+      </div>
+    );
+  }
 
   return (
     <div className="space-y-6">
@@ -25,9 +61,11 @@ export default function MessagesPage() {
             Customer callback requests and messages
           </p>
         </div>
-        <Badge variant="error" className="text-sm">
-          {unreadMessages.length} unread
-        </Badge>
+        {unreadMessages.length > 0 && (
+          <Badge variant="error" className="text-sm">
+            {unreadMessages.length} unread
+          </Badge>
+        )}
       </div>
 
       {/* Summary Cards */}
@@ -87,7 +125,7 @@ export default function MessagesPage() {
           </CardHeader>
           <CardContent>
             <div className="space-y-4">
-              {unreadMessages.map((msg) => (
+              {unreadMessages.map((msg: any) => (
                 <div
                   key={msg.id}
                   className="flex items-start gap-4 rounded-lg border-2 border-red-200 bg-red-50/50 p-4"
@@ -100,7 +138,7 @@ export default function MessagesPage() {
                       <div className="flex-1">
                         <div className="flex items-center gap-2">
                           <h3 className="font-semibold text-gray-900">
-                            {msg.customerName}
+                            {msg.customer_name}
                           </h3>
                           <Badge
                             variant={
@@ -115,20 +153,39 @@ export default function MessagesPage() {
                           </Badge>
                         </div>
                         <p className="mt-1 text-sm text-gray-600">
-                          {formatPhoneNumber(msg.customerPhone)}
+                          {formatPhoneNumber(msg.customer_phone)}
                         </p>
                         <p className="mt-3 text-sm text-gray-900">
                           {msg.message}
                         </p>
                         <p className="mt-2 text-xs text-gray-500">
-                          {format(msg.timestamp, "MMM d, yyyy 'at' h:mm a")}
+                          {format(new Date(msg.created_at), "MMM d, yyyy 'at' h:mm a")}
                         </p>
                       </div>
                       <div className="flex gap-2">
-                        <Button size="sm" variant="outline">
-                          Mark as Read
+                        <Button 
+                          size="sm" 
+                          variant="outline"
+                          onClick={() => handleStatusUpdate(msg.id, "read")}
+                          disabled={updatingId === msg.id}
+                        >
+                          {updatingId === msg.id ? (
+                            <Loader2 className="h-4 w-4 animate-spin" />
+                          ) : (
+                            "Mark as Read"
+                          )}
                         </Button>
-                        <Button size="sm">Resolve</Button>
+                        <Button 
+                          size="sm"
+                          onClick={() => handleStatusUpdate(msg.id, "resolved")}
+                          disabled={updatingId === msg.id}
+                        >
+                          {updatingId === msg.id ? (
+                            <Loader2 className="h-4 w-4 animate-spin" />
+                          ) : (
+                            "Resolve"
+                          )}
+                        </Button>
                       </div>
                     </div>
                   </div>
@@ -147,7 +204,7 @@ export default function MessagesPage() {
           </CardHeader>
           <CardContent>
             <div className="space-y-4">
-              {readMessages.map((msg) => (
+              {readMessages.map((msg: any) => (
                 <div
                   key={msg.id}
                   className="flex items-start gap-4 rounded-lg border border-gray-200 p-4"
@@ -160,7 +217,7 @@ export default function MessagesPage() {
                       <div className="flex-1">
                         <div className="flex items-center gap-2">
                           <h3 className="font-semibold text-gray-900">
-                            {msg.customerName}
+                            {msg.customer_name}
                           </h3>
                           <Badge
                             variant={
@@ -175,16 +232,26 @@ export default function MessagesPage() {
                           </Badge>
                         </div>
                         <p className="mt-1 text-sm text-gray-600">
-                          {formatPhoneNumber(msg.customerPhone)}
+                          {formatPhoneNumber(msg.customer_phone)}
                         </p>
                         <p className="mt-3 text-sm text-gray-900">
                           {msg.message}
                         </p>
                         <p className="mt-2 text-xs text-gray-500">
-                          {format(msg.timestamp, "MMM d, yyyy 'at' h:mm a")}
+                          {format(new Date(msg.created_at), "MMM d, yyyy 'at' h:mm a")}
                         </p>
                       </div>
-                      <Button size="sm">Resolve</Button>
+                      <Button 
+                        size="sm"
+                        onClick={() => handleStatusUpdate(msg.id, "resolved")}
+                        disabled={updatingId === msg.id}
+                      >
+                        {updatingId === msg.id ? (
+                          <Loader2 className="h-4 w-4 animate-spin" />
+                        ) : (
+                          "Resolve"
+                        )}
+                      </Button>
                     </div>
                   </div>
                 </div>
@@ -202,7 +269,7 @@ export default function MessagesPage() {
           </CardHeader>
           <CardContent>
             <div className="space-y-3">
-              {resolvedMessages.map((msg) => (
+              {resolvedMessages.map((msg: any) => (
                 <div
                   key={msg.id}
                   className="flex items-center justify-between border-b border-gray-100 pb-3 last:border-0 last:pb-0"
@@ -211,7 +278,7 @@ export default function MessagesPage() {
                     <CheckCircle className="h-5 w-5 text-green-600" />
                     <div>
                       <p className="font-medium text-gray-900">
-                        {msg.customerName}
+                        {msg.customer_name}
                       </p>
                       <p className="text-sm text-gray-600 line-clamp-1">
                         {msg.message}
@@ -219,10 +286,25 @@ export default function MessagesPage() {
                     </div>
                   </div>
                   <p className="text-xs text-gray-500">
-                    {format(msg.timestamp, "MMM d")}
+                    {format(new Date(msg.created_at), "MMM d")}
                   </p>
                 </div>
               ))}
+            </div>
+          </CardContent>
+        </Card>
+      )}
+
+      {/* Empty State */}
+      {allMessages.length === 0 && (
+        <Card>
+          <CardContent className="py-12">
+            <div className="text-center text-gray-500">
+              <Phone className="mx-auto h-12 w-12 text-gray-300" />
+              <p className="mt-2 text-sm">No messages yet</p>
+              <p className="mt-1 text-xs text-gray-400">
+                Customer callback requests will appear here
+              </p>
             </div>
           </CardContent>
         </Card>

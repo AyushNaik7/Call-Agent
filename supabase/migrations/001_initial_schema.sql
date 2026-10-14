@@ -117,32 +117,35 @@ CREATE POLICY "Users can insert businesses"
 CREATE POLICY "Users can view members of their businesses"
   ON business_members FOR SELECT
   USING (
-    EXISTS (
-      SELECT 1 FROM business_members bm
-      WHERE bm.business_id = business_members.business_id
-      AND bm.user_id = auth.uid()
+    business_id IN (
+      SELECT business_id FROM business_members
+      WHERE user_id = auth.uid()
     )
   );
 
-CREATE POLICY "Owners and admins can insert members"
+CREATE POLICY "Users can insert themselves as owner when creating business"
   ON business_members FOR INSERT
   WITH CHECK (
-    EXISTS (
-      SELECT 1 FROM business_members
-      WHERE business_members.business_id = business_members.business_id
-      AND business_members.user_id = auth.uid()
-      AND business_members.role IN ('owner', 'admin')
+    user_id = auth.uid() AND role = 'owner'
+  );
+
+CREATE POLICY "Owners and admins can insert other members"
+  ON business_members FOR INSERT
+  WITH CHECK (
+    business_id IN (
+      SELECT business_id FROM business_members
+      WHERE user_id = auth.uid()
+      AND role IN ('owner', 'admin')
     )
   );
 
 CREATE POLICY "Owners and admins can delete members"
   ON business_members FOR DELETE
   USING (
-    EXISTS (
-      SELECT 1 FROM business_members bm
-      WHERE bm.business_id = business_members.business_id
-      AND bm.user_id = auth.uid()
-      AND bm.role IN ('owner', 'admin')
+    business_id IN (
+      SELECT business_id FROM business_members
+      WHERE user_id = auth.uid()
+      AND role IN ('owner', 'admin')
     )
   );
 

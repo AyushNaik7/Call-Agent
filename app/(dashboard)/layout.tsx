@@ -3,6 +3,8 @@ import { Sidebar } from "@/components/sidebar";
 import { getCurrentUser, getActiveBusiness } from "@/lib/actions/auth";
 import { redirect } from "next/navigation";
 
+export const instant = false;
+
 export default async function DashboardLayout({
   children,
 }: {
