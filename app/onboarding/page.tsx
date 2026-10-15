@@ -155,16 +155,16 @@ export default function OnboardingPage() {
 
   if (success) {
     return (
-      <div className="flex min-h-screen items-center justify-center bg-gray-50 px-4">
+      <div className="flex min-h-screen items-center justify-center bg-gray-50 dark:bg-neutral-950 px-4">
         <Card className="w-full max-w-md text-center">
           <CardContent className="py-12">
-            <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-green-100">
-              <CheckCircle className="h-10 w-10 text-green-600" />
+            <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-green-100 dark:bg-green-950">
+              <CheckCircle className="h-10 w-10 text-green-600 dark:text-green-400" />
             </div>
-            <h2 className="mt-4 text-2xl font-semibold text-gray-900">
+            <h2 className="mt-4 text-2xl font-semibold text-gray-900 dark:text-gray-100">
               All set!
             </h2>
-            <p className="mt-2 text-sm text-gray-600">
+            <p className="mt-2 text-sm text-gray-600 dark:text-gray-400">
               Your business has been created. Redirecting to dashboard...
             </p>
           </CardContent>
@@ -174,26 +174,26 @@ export default function OnboardingPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 px-4 py-12">
+    <div className="min-h-screen bg-gray-50 dark:bg-neutral-950 px-4 py-12">
       <div className="mx-auto max-w-2xl">
         {/* Header */}
         <div className="mb-8 text-center">
-          <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-lg bg-blue-600">
-            <Bot className="h-7 w-7 text-white" />
+          <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-lg bg-rose-200 dark:bg-rose-900">
+            <Bot className="h-7 w-7 text-rose-900 dark:text-rose-100" />
           </div>
-          <h1 className="mt-4 text-2xl font-semibold text-gray-900">
+          <h1 className="mt-4 text-2xl font-semibold text-gray-900 dark:text-gray-100">
             Set up your business
           </h1>
-          <p className="mt-1 text-sm text-gray-600">
+          <p className="mt-1 text-sm text-gray-600 dark:text-gray-400">
             Let's get your AI receptionist configured
           </p>
         </div>
 
         {/* Progress */}
         <div className="mb-8 flex items-center justify-center gap-2">
-          <div className={`h-2 w-24 rounded-full ${step >= 1 ? "bg-blue-600" : "bg-gray-200"}`} />
-          <div className={`h-2 w-24 rounded-full ${step >= 2 ? "bg-blue-600" : "bg-gray-200"}`} />
-          <div className={`h-2 w-24 rounded-full ${step >= 3 ? "bg-blue-600" : "bg-gray-200"}`} />
+          <div className={`h-2 w-24 rounded-full ${step >= 1 ? "bg-rose-600 dark:bg-rose-700" : "bg-gray-200 dark:bg-neutral-800"}`} />
+          <div className={`h-2 w-24 rounded-full ${step >= 2 ? "bg-rose-600 dark:bg-rose-700" : "bg-gray-200 dark:bg-neutral-800"}`} />
+          <div className={`h-2 w-24 rounded-full ${step >= 3 ? "bg-rose-600 dark:bg-rose-700" : "bg-gray-200 dark:bg-neutral-800"}`} />
         </div>
 
         <Card>
@@ -211,9 +211,9 @@ export default function OnboardingPage() {
           </CardHeader>
           <CardContent>
             {error && (
-              <div className="mb-4 flex items-start gap-2 rounded-lg border border-red-200 bg-red-50 p-3">
-                <AlertCircle className="h-5 w-5 flex-shrink-0 text-red-600" />
-                <p className="text-sm text-red-800">{error}</p>
+              <div className="mb-4 flex items-start gap-2 rounded-lg border border-red-200 dark:border-red-900 bg-red-50 dark:bg-red-950 p-3">
+                <AlertCircle className="h-5 w-5 flex-shrink-0 text-red-600 dark:text-red-400" />
+                <p className="text-sm text-red-800 dark:text-red-200">{error}</p>
               </div>
             )}
 
@@ -221,30 +221,30 @@ export default function OnboardingPage() {
             {step === 1 && (
               <div className="space-y-4">
                 <div>
-                  <label className="block text-sm font-medium text-gray-700">
-                    Business Name <span className="text-red-500">*</span>
+                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">
+                    Business Name <span className="text-red-600 dark:text-red-400">*</span>
                   </label>
                   <div className="relative mt-1">
-                    <Building2 className="absolute left-3 top-1/2 h-5 w-5 -translate-y-1/2 text-gray-400" />
+                    <Building2 className="absolute left-3 top-1/2 h-5 w-5 -translate-y-1/2 text-gray-400 dark:text-gray-500" />
                     <input
                       type="text"
                       value={businessName}
                       onChange={(e) => setBusinessName(e.target.value)}
                       required
-                      className="block w-full rounded-lg border border-gray-300 py-2 pl-10 pr-3 text-sm focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500"
+                      className="block w-full rounded-lg border border-gray-300 dark:border-neutral-700 bg-white dark:bg-neutral-800 text-gray-900 dark:text-gray-100 py-2 pl-10 pr-3 text-sm focus:border-rose-400 dark:focus:border-rose-600 focus:outline-none focus:ring-2 focus:ring-rose-200 dark:focus:ring-rose-900"
                       placeholder="Style Studio"
                     />
                   </div>
                 </div>
 
                 <div>
-                  <label className="block text-sm font-medium text-gray-700">
+                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">
                     Business Type
                   </label>
                   <select
                     value={businessType}
                     onChange={(e) => setBusinessType(e.target.value)}
-                    className="mt-1 block w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500"
+                    className="mt-1 block w-full rounded-lg border border-gray-300 dark:border-neutral-700 bg-white dark:bg-neutral-800 text-gray-900 dark:text-gray-100 px-3 py-2 text-sm focus:border-rose-400 dark:focus:border-rose-600 focus:outline-none focus:ring-2 focus:ring-rose-200 dark:focus:ring-rose-900"
                   >
                     <option value="">Select a type</option>
                     {BUSINESS_TYPES.map((type) => (
@@ -256,16 +256,16 @@ export default function OnboardingPage() {
                 </div>
 
                 <div>
-                  <label className="block text-sm font-medium text-gray-700">
-                    Timezone <span className="text-red-500">*</span>
+                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">
+                    Timezone <span className="text-red-600 dark:text-red-400">*</span>
                   </label>
                   <div className="relative mt-1">
-                    <Clock className="absolute left-3 top-1/2 h-5 w-5 -translate-y-1/2 text-gray-400" />
+                    <Clock className="absolute left-3 top-1/2 h-5 w-5 -translate-y-1/2 text-gray-400 dark:text-gray-500" />
                     <select
                       value={timezone}
                       onChange={(e) => setTimezone(e.target.value)}
                       required
-                      className="block w-full rounded-lg border border-gray-300 py-2 pl-10 pr-3 text-sm focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500"
+                      className="block w-full rounded-lg border border-gray-300 dark:border-neutral-700 bg-white dark:bg-neutral-800 text-gray-900 dark:text-gray-100 py-2 pl-10 pr-3 text-sm focus:border-rose-400 dark:focus:border-rose-600 focus:outline-none focus:ring-2 focus:ring-rose-200 dark:focus:ring-rose-900"
                     >
                       {TIMEZONES.map((tz) => (
                         <option key={tz.value} value={tz.value}>
@@ -282,46 +282,46 @@ export default function OnboardingPage() {
             {step === 2 && (
               <div className="space-y-4">
                 <div>
-                  <label className="block text-sm font-medium text-gray-700">
+                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">
                     Business Phone
                   </label>
                   <div className="relative mt-1">
-                    <Phone className="absolute left-3 top-1/2 h-5 w-5 -translate-y-1/2 text-gray-400" />
+                    <Phone className="absolute left-3 top-1/2 h-5 w-5 -translate-y-1/2 text-gray-400 dark:text-gray-500" />
                     <input
                       type="tel"
                       value={phone}
                       onChange={(e) => setPhone(e.target.value)}
-                      className="block w-full rounded-lg border border-gray-300 py-2 pl-10 pr-3 text-sm focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500"
+                      className="block w-full rounded-lg border border-gray-300 dark:border-neutral-700 bg-white dark:bg-neutral-800 text-gray-900 dark:text-gray-100 py-2 pl-10 pr-3 text-sm focus:border-rose-400 dark:focus:border-rose-600 focus:outline-none focus:ring-2 focus:ring-rose-200 dark:focus:ring-rose-900"
                       placeholder="+1 (555) 123-4567"
                     />
                   </div>
                 </div>
 
                 <div>
-                  <label className="block text-sm font-medium text-gray-700">
+                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">
                     Business Email
                   </label>
                   <div className="relative mt-1">
-                    <Mail className="absolute left-3 top-1/2 h-5 w-5 -translate-y-1/2 text-gray-400" />
+                    <Mail className="absolute left-3 top-1/2 h-5 w-5 -translate-y-1/2 text-gray-400 dark:text-gray-500" />
                     <input
                       type="email"
                       value={email}
                       onChange={(e) => setEmail(e.target.value)}
-                      className="block w-full rounded-lg border border-gray-300 py-2 pl-10 pr-3 text-sm focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500"
+                      className="block w-full rounded-lg border border-gray-300 dark:border-neutral-700 bg-white dark:bg-neutral-800 text-gray-900 dark:text-gray-100 py-2 pl-10 pr-3 text-sm focus:border-rose-400 dark:focus:border-rose-600 focus:outline-none focus:ring-2 focus:ring-rose-200 dark:focus:ring-rose-900"
                       placeholder="hello@yourbusiness.com"
                     />
                   </div>
                 </div>
 
                 <div>
-                  <label className="block text-sm font-medium text-gray-700">
+                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">
                     Business Address
                   </label>
                   <textarea
                     value={address}
                     onChange={(e) => setAddress(e.target.value)}
                     rows={3}
-                    className="mt-1 block w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500"
+                    className="mt-1 block w-full rounded-lg border border-gray-300 dark:border-neutral-700 bg-white dark:bg-neutral-800 text-gray-900 dark:text-gray-100 px-3 py-2 text-sm focus:border-rose-400 dark:focus:border-rose-600 focus:outline-none focus:ring-2 focus:ring-rose-200 dark:focus:ring-rose-900"
                     placeholder="123 Main Street, City, ST 12345"
                   />
                 </div>
@@ -334,16 +334,16 @@ export default function OnboardingPage() {
                 {hours.map((hour, index) => (
                   <div
                     key={hour.day}
-                    className="flex items-center gap-4 border-b border-gray-100 pb-3 last:border-0"
+                    className="flex items-center gap-4 border-b border-gray-200 dark:border-neutral-800 pb-3 last:border-0"
                   >
                     <div className="flex items-center gap-2">
                       <input
                         type="checkbox"
                         checked={hour.is_open}
                         onChange={() => handleHourToggle(index)}
-                        className="h-4 w-4 rounded border-gray-300 text-blue-600 focus:ring-blue-500"
+                        className="h-4 w-4 rounded border-gray-300 dark:border-neutral-700 text-rose-600 dark:text-rose-500 focus:ring-rose-500"
                       />
-                      <span className="w-24 text-sm font-medium text-gray-700">
+                      <span className="w-24 text-sm font-medium text-gray-900 dark:text-gray-100">
                         {hour.name}
                       </span>
                     </div>
@@ -353,18 +353,18 @@ export default function OnboardingPage() {
                           type="time"
                           value={hour.open_time}
                           onChange={(e) => handleHourChange(index, 'open_time', e.target.value)}
-                          className="rounded-lg border border-gray-300 px-3 py-1.5 text-sm focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500"
+                          className="rounded-lg border border-gray-300 dark:border-neutral-700 bg-white dark:bg-neutral-800 text-gray-900 dark:text-gray-100 px-3 py-1.5 text-sm focus:border-rose-400 dark:focus:border-rose-600 focus:outline-none focus:ring-2 focus:ring-rose-200 dark:focus:ring-rose-900"
                         />
-                        <span className="text-gray-500">to</span>
+                        <span className="text-gray-500 dark:text-gray-400">to</span>
                         <input
                           type="time"
                           value={hour.close_time}
                           onChange={(e) => handleHourChange(index, 'close_time', e.target.value)}
-                          className="rounded-lg border border-gray-300 px-3 py-1.5 text-sm focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500"
+                          className="rounded-lg border border-gray-300 dark:border-neutral-700 bg-white dark:bg-neutral-800 text-gray-900 dark:text-gray-100 px-3 py-1.5 text-sm focus:border-rose-400 dark:focus:border-rose-600 focus:outline-none focus:ring-2 focus:ring-rose-200 dark:focus:ring-rose-900"
                         />
                       </div>
                     ) : (
-                      <span className="text-sm text-gray-500">Closed</span>
+                      <span className="text-sm text-gray-500 dark:text-gray-400">Closed</span>
                     )}
                   </div>
                 ))}

@@ -53,17 +53,17 @@ export default function SignupPage() {
   };
 
   return (
-    <div className="flex min-h-screen items-center justify-center bg-gray-50 px-4 py-12">
+    <div className="flex min-h-screen items-center justify-center bg-gray-50 dark:bg-neutral-950 px-4 py-12">
       <div className="w-full max-w-md">
         {/* Logo */}
         <div className="mb-8 text-center">
-          <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-lg bg-blue-600">
-            <Bot className="h-7 w-7 text-white" />
+          <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-lg bg-rose-200 dark:bg-rose-900">
+            <Bot className="h-7 w-7 text-rose-900 dark:text-rose-100" />
           </div>
-          <h1 className="mt-4 text-2xl font-semibold text-gray-900">
+          <h1 className="mt-4 text-2xl font-semibold text-gray-900 dark:text-gray-100">
             AI Receptionist
           </h1>
-          <p className="mt-1 text-sm text-gray-600">
+          <p className="mt-1 text-sm text-gray-600 dark:text-gray-400">
             Create your account to get started
           </p>
         </div>
@@ -79,28 +79,28 @@ export default function SignupPage() {
           <CardContent>
             <form onSubmit={handleSignup} className="space-y-4">
               {error && (
-                <div className="flex items-start gap-2 rounded-lg border border-red-200 bg-red-50 p-3">
-                  <AlertCircle className="h-5 w-5 flex-shrink-0 text-red-600" />
-                  <p className="text-sm text-red-800">{error}</p>
+                <div className="flex items-start gap-2 rounded-lg border border-destructive/20 bg-destructive/10 p-3">
+                  <AlertCircle className="h-5 w-5 flex-shrink-0 text-destructive" />
+                  <p className="text-sm text-destructive">{error}</p>
                 </div>
               )}
 
               <div>
                 <label
                   htmlFor="fullName"
-                  className="block text-sm font-medium text-gray-700"
+                  className="block text-sm font-medium text-foreground"
                 >
                   Full Name
                 </label>
                 <div className="relative mt-1">
-                  <User className="absolute left-3 top-1/2 h-5 w-5 -translate-y-1/2 text-gray-400" />
+                  <User className="absolute left-3 top-1/2 h-5 w-5 -translate-y-1/2 text-muted-foreground" />
                   <input
                     id="fullName"
                     type="text"
                     value={fullName}
                     onChange={(e) => setFullName(e.target.value)}
                     required
-                    className="block w-full rounded-lg border border-gray-300 py-2 pl-10 pr-3 text-sm focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500"
+                    className="block w-full rounded-lg border border-input bg-background py-2 pl-10 pr-3 text-sm text-foreground focus:border-primary focus:outline-none focus:ring-2 focus:ring-ring"
                     placeholder="John Doe"
                   />
                 </div>
@@ -109,19 +109,19 @@ export default function SignupPage() {
               <div>
                 <label
                   htmlFor="email"
-                  className="block text-sm font-medium text-gray-700"
+                  className="block text-sm font-medium text-foreground"
                 >
                   Email
                 </label>
                 <div className="relative mt-1">
-                  <Mail className="absolute left-3 top-1/2 h-5 w-5 -translate-y-1/2 text-gray-400" />
+                  <Mail className="absolute left-3 top-1/2 h-5 w-5 -translate-y-1/2 text-muted-foreground" />
                   <input
                     id="email"
                     type="email"
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
                     required
-                    className="block w-full rounded-lg border border-gray-300 py-2 pl-10 pr-3 text-sm focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500"
+                    className="block w-full rounded-lg border border-input bg-background py-2 pl-10 pr-3 text-sm text-foreground focus:border-primary focus:outline-none focus:ring-2 focus:ring-ring"
                     placeholder="you@example.com"
                   />
                 </div>
@@ -130,23 +130,23 @@ export default function SignupPage() {
               <div>
                 <label
                   htmlFor="password"
-                  className="block text-sm font-medium text-gray-700"
+                  className="block text-sm font-medium text-foreground"
                 >
                   Password
                 </label>
                 <div className="relative mt-1">
-                  <Lock className="absolute left-3 top-1/2 h-5 w-5 -translate-y-1/2 text-gray-400" />
+                  <Lock className="absolute left-3 top-1/2 h-5 w-5 -translate-y-1/2 text-muted-foreground" />
                   <input
                     id="password"
                     type="password"
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
                     required
-                    className="block w-full rounded-lg border border-gray-300 py-2 pl-10 pr-3 text-sm focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500"
+                    className="block w-full rounded-lg border border-input bg-background py-2 pl-10 pr-3 text-sm text-foreground focus:border-primary focus:outline-none focus:ring-2 focus:ring-ring"
                     placeholder="••••••••"
                   />
                 </div>
-                <p className="mt-1 text-xs text-gray-500">
+                <p className="mt-1 text-xs text-muted-foreground">
                   Must be at least 6 characters
                 </p>
               </div>
@@ -162,10 +162,10 @@ export default function SignupPage() {
             </form>
 
             <div className="mt-6 text-center text-sm">
-              <span className="text-gray-600">Already have an account? </span>
+              <span className="text-gray-600 dark:text-gray-400">Already have an account? </span>
               <Link
                 href="/auth/login"
-                className="font-medium text-blue-600 hover:text-blue-700"
+                className="font-medium text-rose-600 dark:text-rose-400 hover:underline"
               >
                 Sign in
               </Link>
@@ -173,7 +173,7 @@ export default function SignupPage() {
           </CardContent>
         </Card>
 
-        <p className="mt-8 text-center text-xs text-gray-500">
+        <p className="mt-8 text-center text-xs text-gray-500 dark:text-gray-400">
           By creating an account, you agree to our Terms of Service and Privacy
           Policy
         </p>

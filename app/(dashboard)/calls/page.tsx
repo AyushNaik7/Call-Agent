@@ -2,12 +2,12 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Phone, Download, Filter, Search } from "lucide-react";
-import { getCalls } from "@/lib/actions/calls";
+import { getCallLogs } from "@/lib/actions/call-logs";
 import { formatDuration, formatPhoneNumber } from "@/lib/utils";
 import { format } from "date-fns";
 
 export default async function CallsPage() {
-  const calls = await getCalls();
+  const callLogs = await getCallLogs();
 
   return (
     <div className="space-y-6">
@@ -48,16 +48,16 @@ export default async function CallsPage() {
       {/* Calls List */}
       <Card>
         <CardHeader>
-          <CardTitle>All Calls ({calls.length})</CardTitle>
+          <CardTitle>All Calls ({callLogs.length})</CardTitle>
         </CardHeader>
         <CardContent>
-          {calls.length > 0 ? (
+          {callLogs.length > 0 ? (
             <div className="overflow-x-auto">
               <table className="w-full">
                 <thead>
                   <tr className="border-b border-gray-200">
                     <th className="pb-3 text-left text-sm font-medium text-gray-600">
-                      Customer
+                      Caller
                     </th>
                     <th className="pb-3 text-left text-sm font-medium text-gray-600">
                       Phone
@@ -66,7 +66,7 @@ export default async function CallsPage() {
                       Status
                     </th>
                     <th className="pb-3 text-left text-sm font-medium text-gray-600">
-                      Outcome
+                      AI Handled
                     </th>
                     <th className="pb-3 text-left text-sm font-medium text-gray-600">
                       Duration
@@ -80,7 +80,7 @@ export default async function CallsPage() {
                   </tr>
                 </thead>
                 <tbody>
-                  {calls.map((call: any) => (
+                  {callLogs.map((call: any) => (
                     <tr
                       key={call.id}
                       className="border-b border-gray-100 last:border-0"
@@ -92,22 +92,25 @@ export default async function CallsPage() {
                           </div>
                           <div>
                             <p className="font-medium text-gray-900">
-                              {call.customer_name || "Unknown"}
+                              {call.caller_name || "Unknown Caller"}
+                            </p>
+                            <p className="text-xs text-gray-500">
+                              {call.direction === "inbound" ? "Incoming" : "Outgoing"}
                             </p>
                           </div>
                         </div>
                       </td>
                       <td className="py-4 text-sm text-gray-600">
-                        {formatPhoneNumber(call.customer_phone)}
+                        {formatPhoneNumber(call.from_number)}
                       </td>
                       <td className="py-4">
                         <Badge
                           variant={
                             call.status === "completed"
                               ? "success"
-                              : call.status === "missed"
+                              : call.status === "busy" || call.status === "failed"
                               ? "error"
-                              : call.status === "voicemail"
+                              : call.status === "in-progress"
                               ? "warning"
                               : "info"
                           }
@@ -115,11 +118,34 @@ export default async function CallsPage() {
                           {call.status}
                         </Badge>
                       </td>
-                      <td className="py-4 text-sm text-gray-900">
-                        {call.outcome ? call.outcome.replace(/_/g, " ") : "-"}
+                      <td className="py-4">
+                        {call.ai_handled ? (
+                          <div className="flex flex-col gap-1">
+                            <Badge variant="success" className="w-fit">
+                              AI Handled
+                            </Badge>
+                            {call.appointment_created && (
+                              <span className="text-xs text-gray-600">
+                                📅 Appointment booked
+                              </span>
+                            )}
+                            {call.callback_requested && (
+                              <span className="text-xs text-gray-600">
+                                📞 Callback requested
+                              </span>
+                            )}
+                            {call.transferred_to_human && (
+                              <span className="text-xs text-gray-600">
+                                👤 Transferred
+                              </span>
+                            )}
+                          </div>
+                        ) : (
+                          <Badge variant="default">Manual</Badge>
+                        )}
                       </td>
                       <td className="py-4 text-sm text-gray-600">
-                        {call.duration > 0 ? formatDuration(call.duration) : "-"}
+                        {call.duration ? formatDuration(call.duration) : "-"}
                       </td>
                       <td className="py-4 text-sm text-gray-600">
                         <div>
@@ -144,7 +170,7 @@ export default async function CallsPage() {
               <Phone className="mx-auto h-12 w-12 text-gray-300" />
               <p className="mt-2 text-sm">No calls yet</p>
               <p className="mt-1 text-xs text-gray-400">
-                Call history will appear here once your AI receptionist handles calls
+                Once you configure Twilio, incoming calls will appear here
               </p>
             </div>
           )}

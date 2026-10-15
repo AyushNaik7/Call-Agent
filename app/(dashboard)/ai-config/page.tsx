@@ -4,6 +4,8 @@ import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/com
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Bot, Save, TestTube, Phone, Zap } from "lucide-react";
+import { ChatInterface } from "@/components/ai/chat-interface";
+import { VoiceChat } from "@/components/voice/voice-chat";
 
 export default function AIConfigPage() {
   return (
@@ -244,21 +246,30 @@ export default function AIConfigPage() {
         <CardHeader>
           <div className="flex items-center gap-2">
             <TestTube className="h-5 w-5 text-gray-600" />
-            <CardTitle>Test Your AI</CardTitle>
+            <CardTitle>Test Your AI Receptionist</CardTitle>
           </div>
           <CardDescription>
-            Try out your AI receptionist configuration
+            Test with text chat or voice call
           </CardDescription>
         </CardHeader>
         <CardContent>
-          <p className="text-sm text-gray-600 mb-4">
-            Test how your AI responds with your current settings before going
-            live. This will open a browser-based voice chat interface.
-          </p>
-          <Button className="gap-2">
-            <Phone className="h-4 w-4" />
-            Start Test Call
-          </Button>
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+            {/* Text Chat */}
+            <div>
+              <h3 className="text-sm font-medium text-gray-700 mb-3">💬 Text Chat</h3>
+              <div className="rounded-lg border border-gray-200 h-[600px]">
+                <ChatInterface />
+              </div>
+            </div>
+
+            {/* Voice Chat */}
+            <div>
+              <h3 className="text-sm font-medium text-gray-700 mb-3">🎤 Voice Call</h3>
+              <div className="rounded-lg border border-gray-200 h-[600px]">
+                <VoiceChat />
+              </div>
+            </div>
+          </div>
         </CardContent>
       </Card>
 

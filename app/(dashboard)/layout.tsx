@@ -1,7 +1,7 @@
-import { Header } from "@/components/header";
-import { Sidebar } from "@/components/sidebar";
 import { getCurrentUser, getActiveBusiness } from "@/lib/actions/auth";
 import { redirect } from "next/navigation";
+import { connection } from "next/server";
+import { DashboardLayoutClient } from "./dashboard-client";
 
 export const instant = false;
 
@@ -10,6 +10,9 @@ export default async function DashboardLayout({
 }: {
   children: React.ReactNode;
 }) {
+  // Force dynamic rendering to avoid prerender issues
+  await connection();
+  
   const user = await getCurrentUser();
   
   if (!user) {
@@ -23,13 +26,5 @@ export default async function DashboardLayout({
     redirect("/onboarding");
   }
 
-  return (
-    <div className="flex h-screen overflow-hidden bg-gray-50">
-      <Sidebar business={business} />
-      <div className="flex flex-1 flex-col overflow-hidden">
-        <Header user={user} />
-        <main className="flex-1 overflow-y-auto p-6">{children}</main>
-      </div>
-    </div>
-  );
+  return <DashboardLayoutClient user={user} business={business}>{children}</DashboardLayoutClient>;
 }

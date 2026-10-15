@@ -44,3 +44,32 @@ export async function updateMessageStatus(
   revalidatePath("/messages");
   return data;
 }
+
+export async function createMessage(data: {
+  customer_name: string;
+  customer_phone: string;
+  message: string;
+  priority?: "low" | "medium" | "high";
+}) {
+  const business = await getActiveBusiness();
+  if (!business) {
+    throw new Error("No active business found");
+  }
+
+  const supabase = await createClient();
+
+  const { error } = await supabase.from("messages").insert({
+    business_id: business.id,
+    customer_name: data.customer_name,
+    customer_phone: data.customer_phone,
+    message: data.message,
+    priority: data.priority || "medium",
+    status: "unread",
+  });
+
+  if (error) {
+    throw new Error(error.message);
+  }
+
+  revalidatePath("/messages");
+}

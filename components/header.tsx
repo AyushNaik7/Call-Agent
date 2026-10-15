@@ -1,8 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { Bell, Search, LogOut, User as UserIcon } from "lucide-react";
-import { Button } from "./ui/button";
+import { Bell, Search, LogOut, Moon, Sun } from "lucide-react";
 import { getInitials } from "@/lib/utils";
 import { logout } from "@/lib/actions/auth";
 
@@ -13,9 +12,11 @@ interface HeaderProps {
       full_name?: string;
     };
   };
+  theme: "light" | "dark";
+  toggleTheme: () => void;
 }
 
-export function Header({ user }: HeaderProps) {
+export function Header({ user, theme, toggleTheme }: HeaderProps) {
   const [showMenu, setShowMenu] = useState(false);
   
   const fullName = user?.user_metadata?.full_name || user?.email || "User";
@@ -26,37 +27,50 @@ export function Header({ user }: HeaderProps) {
   };
 
   return (
-    <header className="flex h-16 items-center justify-between border-b border-gray-200 bg-white px-6">
+    <header className="flex h-20 items-center justify-between glass border-b border-white/10 px-8 backdrop-blur-xl shadow-sm">
       {/* Search */}
-      <div className="flex flex-1 items-center gap-4">
-        <div className="relative w-96">
-          <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-gray-400" />
+      <div className="flex flex-1 items-center gap-4 max-w-2xl">
+        <div className="relative w-full">
+          <Search className="absolute left-4 top-1/2 h-5 w-5 -translate-y-1/2 text-gray-400 dark:text-gray-500" />
           <input
             type="text"
             placeholder="Search calls, contacts, appointments..."
-            className="h-10 w-full rounded-lg border border-gray-300 pl-10 pr-4 text-sm focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500"
+            className="h-12 w-full rounded-2xl border border-gray-200/50 dark:border-white/10 bg-white/50 dark:bg-white/5 pl-12 pr-4 text-sm text-gray-900 dark:text-white placeholder:text-gray-400 dark:placeholder:text-gray-500 focus:border-blue-400 dark:focus:border-blue-500 focus:outline-none focus:ring-4 focus:ring-blue-100 dark:focus:ring-blue-900/30 transition-all backdrop-blur-sm"
           />
         </div>
       </div>
 
       {/* Actions */}
       <div className="flex items-center gap-3">
+        {/* Theme Toggle */}
+        <button
+          onClick={toggleTheme}
+          className="rounded-xl p-3 hover:bg-white/50 dark:hover:bg-white/10 transition-all duration-200"
+          aria-label="Toggle theme"
+        >
+          {theme === "light" ? (
+            <Moon className="h-5 w-5 text-gray-600 dark:text-gray-400" />
+          ) : (
+            <Sun className="h-5 w-5 text-gray-600 dark:text-gray-400" />
+          )}
+        </button>
+
         {/* Notifications */}
-        <button className="relative rounded-lg p-2 hover:bg-gray-100">
-          <Bell className="h-5 w-5 text-gray-600" />
-          <span className="absolute right-1.5 top-1.5 h-2 w-2 rounded-full bg-red-500" />
+        <button className="relative rounded-xl p-3 hover:bg-white/50 dark:hover:bg-white/10 transition-all duration-200">
+          <Bell className="h-5 w-5 text-gray-600 dark:text-gray-400" />
+          <span className="absolute right-2 top-2 h-2 w-2 rounded-full bg-red-500 ring-2 ring-white dark:ring-slate-900" />
         </button>
 
         {/* User Menu */}
         <div className="relative">
           <button
             onClick={() => setShowMenu(!showMenu)}
-            className="flex items-center gap-2 rounded-lg p-2 hover:bg-gray-100"
+            className="flex items-center gap-3 rounded-xl px-4 py-2.5 hover:bg-white/50 dark:hover:bg-white/10 transition-all duration-200"
           >
-            <div className="flex h-7 w-7 items-center justify-center rounded-full bg-blue-600 text-xs font-medium text-white">
+            <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-gradient-to-br from-blue-500 to-indigo-600 text-xs font-bold text-white shadow-lg">
               {initials}
             </div>
-            <span className="text-sm font-medium text-gray-700">{fullName}</span>
+            <span className="text-sm font-semibold text-gray-900 dark:text-white">{fullName}</span>
           </button>
 
           {showMenu && (
@@ -65,14 +79,14 @@ export function Header({ user }: HeaderProps) {
                 className="fixed inset-0 z-10"
                 onClick={() => setShowMenu(false)}
               />
-              <div className="absolute right-0 z-20 mt-2 w-48 rounded-lg border border-gray-200 bg-white py-1 shadow-lg">
-                <div className="border-b border-gray-100 px-4 py-2">
-                  <p className="text-sm font-medium text-gray-900">{fullName}</p>
-                  <p className="text-xs text-gray-500">{user?.email}</p>
+              <div className="absolute right-0 z-20 mt-2 w-56 rounded-2xl glass border border-white/20 dark:border-white/10 py-2 shadow-2xl backdrop-blur-xl">
+                <div className="border-b border-white/10 px-4 py-3">
+                  <p className="text-sm font-semibold text-gray-900 dark:text-white">{fullName}</p>
+                  <p className="text-xs text-gray-500 dark:text-gray-400">{user?.email}</p>
                 </div>
                 <button
                   onClick={handleLogout}
-                  className="flex w-full items-center gap-2 px-4 py-2 text-left text-sm text-gray-700 hover:bg-gray-50"
+                  className="flex w-full items-center gap-3 px-4 py-2.5 text-left text-sm font-medium text-gray-700 dark:text-gray-300 hover:bg-white/50 dark:hover:bg-white/10 transition-all"
                 >
                   <LogOut className="h-4 w-4" />
                   Sign out
